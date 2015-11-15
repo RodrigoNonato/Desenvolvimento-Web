@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Cadastra Produto</title>
+	<h:outputStylesheet library="css" name="styles.css" />
+	
+	<h:outputScript library="js" name="jquery.maskMoney.js"/>
+	<script>
+		jQuery(function($)
+		{
+			$('input.jQueryPreco').maskMoney({prefix:'R$ ',
+			  allowNegative: true,
+			  thousands:'.',
+			  decimal:',',
+			  affixesStay: false});
+		});
+	</script>
+</h:head>
+<h:body>
+<h:form id="cadprod">
+	<p:panel header="Cadastro de Produto" id="panel" footer="Usuário Logado: #{login.user}">
+		<p:focus context="panel"/>
+			<h:commandLink action="#{login.logout}" value="Logout"></h:commandLink>
+		<p:panelGrid columns="2" styleClass="centerPanelGrid" id="pgrid">
+			<p:outputLabel value="Descrição:" for="descricao" />
+			<p:inputText id="descricao"
+						 value="#{produtoBean.produto.descricao}" />
+			<p:outputLabel value="Preço" for="preco" />
+			<p:inputText id="preco"
+						 value="#{produtoBean.produto.preco}"
+						 styleClass="jQueryPreco">
+				<f:convertNumber groupingUsed="true" maxFractionDigits="2" />
+			</p:inputText>
+			<p:commandButton value="Salva"
+							 action="#{produtoBean.salva}"
+						     update="growl,pgrid"
+							 icon="ui-icon-disk"
+							 oncomplete="$(function(){PrimeFaces.focus('cadprod:descricao');});">
+				<p:confirm header="Confirmação"
+						   message="Tem certeza ?"
+						   icon="ui-icon-alert" />
+				</p:commandButton>
+			<p:commandButton value="Lista"
+							 action="listaProdutos_pag"
+							 icon="ui-icon-search"/>
+		</p:panelGrid>
+	</p:panel>
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+		<p:commandButton value="Sim"
+						 type="button"
+						 styleClass="ui-confirmdialog-yes"
+						 icon="ui-icon-check" />
+		<p:commandButton value="Não"
+						 type="button"
+						 styleClass="ui-confirmdialog-no"
+						 icon="ui-icon-close" />
+	</p:confirmDialog>
+	<p:growl id="growl"
+			 showSummary="true"
+			 showDetail="true"
+			 sticky="false"
+			 life="3000"/>
+</h:form>
+</h:body>
+</html>

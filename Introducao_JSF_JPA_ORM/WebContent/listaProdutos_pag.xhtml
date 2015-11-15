@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
+	<title>Lista Produtos</title>
+	<h:outputStylesheet library="css" name="styles.css"/>
+	
+	<h:outputScript library="js" name="jquery.maskMoney.js"/>
+	<script>
+		jQuery(function($)
+		{
+			$('input.jQueryPreco').maskMoney({prefix:'R$ ',
+			  allowNegative: true,
+			  thousands:'.',
+			  decimal:',',
+			  affixesStay: false});
+		});
+	</script>
+</h:head>
+<h:body>
+<h:form prependId="false">
+	<h:panelGrid columns="1" styleClass="linkPanelGrid">
+		<p:dataTable id="dtproduto"
+					 var="produto"
+					 value="#{produtoBean.produtos}"
+					 rows="5"
+					 paginator="true"
+					 paginatorTemplate="{CurrentPageReport}
+					 					{FirstPageLink}
+					 					{PreviousPageLink}
+					 					{PageLinks}
+					 					{NextPageLink}
+					 					{LastPageLink}
+					 					{RowsPerPageDropdown}"
+					 rowsPerPageTemplate="5,10,15"
+					 draggableColumns="true"
+					 draggableRows="true"
+					 sortMode="multiple"
+					 selection="#{produtoBean.produtoSelecionado}"
+					 selectionMode="single"
+					 rowKey="#{produto.idProduto}"
+					 widgetVar="dtproduto">
+			<f:facet name="header">Listagem de Produtos</f:facet>
+			
+			<p:column headerText="Código" sortBy="#{produto.idProduto}" filterBy="#{produto.idProduto}">
+				<h:outputText value="#{produto.idProduto}" />
+			</p:column>
+			<p:column headerText="Descrição" sortBy="#{produto.descricao}" filterBy="#{produto.descricao}">
+				<h:outputText value="#{produto.descricao}" />
+			</p:column>
+			<p:column headerText="Preço" sortBy="#{produto.preco}" filterBy="#{produto.preco}">
+				<h:outputText value="#{produto.preco}" />
+			</p:column>
+			<p:column headerText="" width="10%">
+				<h:commandLink value="excluir" action="#{produtoBean.exclui(produto)}"/>
+			</p:column>
+			<f:facet name="footer">Total de #{fn:length(produtoBean.produtos)} Produtos</f:facet>
+		</p:dataTable>
+		
+		<h:form>
+    		<p:growl id="growl" life="2000" />     
+    		<p:commandButton value="Voltar" id="ajax" update="growl" action="cadastraProduto" styleClass="ui-priority-primary" />
+		</h:form>
+	</h:panelGrid>
+	
+	<p:contextMenu for="dtproduto">
+		<p:menuitem value="Editar"
+					update="opEditaProduto"
+					icon="ui-icon-search"
+					oncomplete="PF('produtoDialog').show()"/>
+		<p:menuitem value="Excluir"
+					update="dtproduto"
+					icon="ui-icon-close"
+					actionListener="#{produtoBean.exclui}"/>
+	</p:contextMenu>
+</h:form>
+
+	<p:dialog header="Editando um Produto"
+			  widgetVar="produtoDialog"
+			  modal="true"
+			  showEffect="fade"
+			  hideEffect="fade"
+			  resizable="false">
+		<p:outputPanel id="opEditaProduto" style="text-align:center;">
+		<h:form id="formdialog" prependId="false">
+			<h:panelGrid columns="2" rendered="#{not empty produtoBean.produtoSelecionado}" columnClasses="label,value">
+				<h:outputText value="Id:" />
+				<h:outputText value="#{produtoBean.produtoSelecionado.idProduto}" />
+				<h:outputText value="Descrição" />
+				<p:inputText value="#{produtoBean.produtoSelecionado.descricao}" />
+				<h:outputText value="Preço" />
+				<p:inputText value="#{produtoBean.produtoSelecionado.preco}" styleClass="jQueryPreco"/>
+				<p:commandButton value="Salvar"
+								 actionListener="#{produtoBean.atualiza}"
+								 icon="ui-icon-disk"
+								 oncomplete="PF('produtoDialog').hide()"
+								 update="growl,dtproduto">
+				</p:commandButton>
+				<p:commandButton value="Cancela" onclick="produtoDialog.hide()"/>
+			</h:panelGrid>
+		</h:form>
+		</p:outputPanel>
+	</p:dialog>
+	
+	<p:growl id="growl" showSummary="true" showDetail="true" sticky="false" life="3000"/>
+</h:body>
+</html>

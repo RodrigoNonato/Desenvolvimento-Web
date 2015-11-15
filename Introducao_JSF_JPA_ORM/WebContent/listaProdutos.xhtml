@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Lista Produtos</title>
+	<h:outputStylesheet library="css" name="styles.css" />
+</h:head>
+<h:body>
+	<h:form>
+		<h:panelGrid columns="1" styleClass="linkPanelGrid">
+			<h:dataTable value="#{produtoBean.produtos}" var="produto" border="2"
+				width="80%" styleClass="produto-table"
+				headerClass="produto-table-header"
+				rowClasses="produto-table-odd-row,produto-table-even-row">
+				<h:column>
+					<f:facet name="header">Código</f:facet>
+            #{produto.idProduto}
+         </h:column>
+				<h:column>
+					<f:facet name="header">Descrição</f:facet>
+            #{produto.descricao}
+         </h:column>
+				<h:column>
+					<f:facet name="header">Preço</f:facet>
+            #{produto.preco}
+         </h:column>
+				<h:column>
+					<f:facet name="header" />
+					<h:commandLink value="excluir"
+						action="#{produtoBean.exclui(produto)}" />
+				</h:column>
+			</h:dataTable>
+			<h:commandLink action="cadastraProduto">Voltar</h:commandLink>
+		</h:panelGrid>
+	</h:form>
+</h:body>
+</html>

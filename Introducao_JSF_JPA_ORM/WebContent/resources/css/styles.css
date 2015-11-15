@@ -1,0 +1,45 @@
+@CHARSET "ISO-8859-1";
+
+.produto-table {
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.produto-table-header {
+	text-align: center;
+	background: none repeat scroll 0 0 #E5E5E5;
+	border-bottom: 1px solid #BBBBBB;
+	padding: 16px;
+}
+
+.produto-table-odd-row {
+	text-align: center;
+	background: none repeat scroll 0 0 #FFFFFFF;
+	border-top: 1px solid #BBBBBB;
+}
+
+.produto-table-even-row {
+	text-align: center;
+	background: none repeat scroll 0 0 #F9F9F9;
+	border-top: 1px solid #BBBBBB;
+}
+
+.linkPanelGrid {
+	text-align: center;
+	width: 80%;
+	margin: 0px auto;
+}
+
+.centerPanelGrid {
+	width: 40%;
+	margin: 0px auto;
+}
+
+.centerText {
+	text-align: center;
+}
+
+.ui-panel-titlebar {
+	text-align: center;
+}
